@@ -1,0 +1,6 @@
+Flask==2.3.3
+Werkzeug==2.3.7
+openai>=1.66.0,<3.0.0
+python-dotenv==1.0.0
+pypdf>=5.0,<7.0
+gunicorn>=21.2.0

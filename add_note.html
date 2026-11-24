@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Add Note - AI Study Assistant{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white py-4">
+                <h3 class="mb-0 text-center">
+                    <i class="bi bi-plus-circle"></i> Create New Study Note
+                </h3>
+                <p class="mb-0 text-center mt-2">Add your study material and let AI enhance your learning</p>
+            </div>
+            
+            <div class="card-body p-5">
+                <form method="POST" action="{{ url_for('add_note') }}" novalidate>
+                    <div class="mb-4">
+                        <label for="title" class="form-label fw-bold">
+                            <i class="bi bi-bookmark"></i> Note Title
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="title" name="title" 
+                               placeholder="Enter a descriptive title for your note" required>
+                        <div class="form-text">
+                            Choose a clear, descriptive title that summarizes your study topic.
+                        </div>
+                        <div class="invalid-feedback">
+                            Please provide a title for your note.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="content" class="form-label fw-bold">
+                            <i class="bi bi-file-text"></i> Note Content
+                        </label>
+                        <textarea class="form-control" id="content" name="content" rows="12" 
+                                  placeholder="Write your study notes here... Include key concepts, definitions, examples, and any important information you want to remember." 
+                                  required></textarea>
+                        <div class="form-text">
+                            The more detailed your notes, the better AI can help you with summaries, quizzes, and answers.
+                        </div>
+                        <div class="invalid-feedback">
+                            Please provide content for your note.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-lg me-md-2">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-save"></i> Save Note
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Tips Card -->
+        <div class="card mt-4 border-info">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightbulb"></i> Tips for Better Notes
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">
+                            <i class="bi bi-check-circle"></i> Do Include:
+                        </h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-arrow-right text-success"></i> Key concepts and definitions</li>
+                            <li><i class="bi bi-arrow-right text-success"></i> Examples and case studies</li>
+                            <li><i class="bi bi-arrow-right text-success"></i> Important formulas or processes</li>
+                            <li><i class="bi bi-arrow-right text-success"></i> Your own insights and questions</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">
+                            <i class="bi bi-info-circle"></i> AI Features:
+                        </h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-robot text-primary"></i> Generate summaries</li>
+                            <li><i class="bi bi-puzzle text-primary"></i> Create practice quizzes</li>
+                            <li><i class="bi bi-chat-dots text-primary"></i> Answer your questions</li>
+                            <li><i class="bi bi-graph-up text-primary"></i> Track your progress</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByTagName('form');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Auto-save functionality (optional enhancement)
+let autoSaveTimeout;
+const titleInput = document.getElementById('title');
+const contentTextarea = document.getElementById('content');
+
+function autoSave() {
+    // This could be enhanced to save drafts to localStorage
+    console.log('Auto-saving draft...');
+}
+
+[titleInput, contentTextarea].forEach(element => {
+    element.addEventListener('input', function() {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(autoSave, 2000); // Auto-save after 2 seconds of inactivity
+    });
+});
+
+// Character counter for content
+contentTextarea.addEventListener('input', function() {
+    const charCount = this.value.length;
+    const maxChars = 5000; // Reasonable limit for study notes
+    
+    // Create or update character counter
+    let counter = document.getElementById('char-counter');
+    if (!counter) {
+        counter = document.createElement('small');
+        counter.id = 'char-counter';
+        counter.className = 'text-muted float-end';
+        this.parentNode.appendChild(counter);
+    }
+    
+    counter.textContent = `${charCount}/${maxChars} characters`;
+    
+    if (charCount > maxChars * 0.9) {
+        counter.className = 'text-warning float-end';
+    } else if (charCount > maxChars) {
+        counter.className = 'text-danger float-end';
+    } else {
+        counter.className = 'text-muted float-end';
+    }
+});
+</script>
+{% endblock %}

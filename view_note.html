@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}{{ note.title }} - AI Study Assistant{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Note Content -->
+        <div class="card shadow-lg border-0 mb-4">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-journal-text"></i> {{ note.title }}
+                    </h4>
+                    <div>
+                        <a href="{{ url_for('ai_assistant') }}?note_id={{ note.id }}" 
+                           class="btn btn-light btn-sm">
+                            <i class="bi bi-robot"></i> AI Assistant
+                        </a>
+                    </div>
+                </div>
+                <small class="text-light">
+                    <i class="bi bi-calendar3"></i> Created: {{ note.created_at.split()[0] if note.created_at else 'Recently' }}
+                </small>
+            </div>
+            
+            <div class="card-body">
+                <div class="note-content">
+                    {{ note.content | replace('\n', '<br>') | safe }}
+                </div>
+            </div>
+            
+            <div class="card-footer bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Dashboard
+                    </a>
+                    <div class="btn-group">
+                        <a href="{{ url_for('ai_assistant') }}?note_id={{ note.id }}" 
+                           class="btn btn-primary">
+                            <i class="bi bi-robot"></i> Use AI Assistant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- AI Interactions History -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock-history"></i> AI Interactions
+                </h5>
+            </div>
+            
+            <div class="card-body">
+                {% if ai_responses %}
+                    <div class="timeline">
+                        {% for response in ai_responses %}
+                            <div class="timeline-item mb-3">
+                                <div class="timeline-marker">
+                                    {% if response.type == 'summary' %}
+                                        <i class="bi bi-file-text text-primary"></i>
+                                    {% elif response.type == 'quiz' %}
+                                        <i class="bi bi-puzzle text-success"></i>
+                                    {% elif response.type == 'answer' %}
+                                        <i class="bi bi-chat-dots text-info"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="timeline-content">
+                                    <div class="bg-light p-3 rounded">
+                                        <h6 class="fw-bold mb-2">
+                                            {% if response.type == 'summary' %}
+                                                📝 Summary
+                                            {% elif response.type == 'quiz' %}
+                                                🧠 Quiz
+                                            {% elif response.type == 'answer' %}
+                                                💡 Answer
+                                            {% endif %}
+                                        </h6>
+                                        <p class="mb-1 small">
+                                            {{ response.text[:100] }}{% if response.text|length > 100 %}...{% endif %}
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock"></i> {{ response.created_at.split()[0] if response.created_at else 'Recently' }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-robot display-4 text-muted"></i>
+                        <p class="text-muted mt-3">No AI interactions yet</p>
+                        <a href="{{ url_for('ai_assistant') }}?note_id={{ note.id }}" 
+                           class="btn btn-success btn-sm">
+                            <i class="bi bi-plus-circle"></i> Start AI Session
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightning"></i> Quick Actions
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('ai_assistant') }}?note_id={{ note.id }}" 
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-file-text"></i> Generate Summary
+                    </a>
+                    <a href="{{ url_for('ai_assistant') }}?note_id={{ note.id }}" 
+                       class="btn btn-outline-success btn-sm">
+                        <i class="bi bi-puzzle"></i> Create Quiz
+                    </a>
+                    <a href="{{ url_for('ai_assistant') }}?note_id={{ note.id }}" 
+                       class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-chat-dots"></i> Ask Question
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Note Statistics -->
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-warning text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-graph-up"></i> Note Statistics
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="stat-item">
+                            <h5 class="fw-bold text-primary">{{ note.content.split()|length }}</h5>
+                            <small class="text-muted">Words</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-item">
+                            <h5 class="fw-bold text-success">{{ note.content|length }}</h5>
+                            <small class="text-muted">Characters</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-item">
+                            <h5 class="fw-bold text-info">{{ ai_responses|length }}</h5>
+                            <small class="text-muted">AI Uses</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Add reading time estimation
+document.addEventListener('DOMContentLoaded', function() {
+    const noteContent = document.querySelector('.note-content').textContent;
+    const wordsPerMinute = 200;
+    const words = noteContent.split(/\s+/).length;
+    const readingTime = Math.ceil(words / wordsPerMinute);
+    
+    // Add reading time indicator
+    const header = document.querySelector('.card-header small');
+    if (header) {
+        header.innerHTML += ` • <i class="bi bi-clock"></i> ${readingTime} min read`;
+    }
+});
+
+// Enhanced text highlighting
+function highlightText() {
+    if (window.getSelection) {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const span = document.createElement('span');
+            span.className = 'highlight bg-warning';
+            try {
+                range.surroundContents(span);
+                selection.removeAllRanges();
+            } catch (e) {
+                console.log('Unable to highlight selection');
+            }
+        }
+    }
+}
+
+// Add highlight functionality on double-click
+document.querySelector('.note-content').addEventListener('dblclick', highlightText);
+</script>
+{% endblock %}

@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - AI Study Assistant{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <div class="profile-avatar mb-3">
+                    <i class="bi bi-person-circle display-1"></i>
+                </div>
+                <h3 class="mb-0">{{ user_name }}</h3>
+                <p class="mb-0 mt-2">{{ user_email }}</p>
+            </div>
+            
+            <div class="card-body p-5">
+                <!-- Profile Statistics -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="stat-card text-center p-4 bg-primary text-white rounded">
+                            <i class="bi bi-journal-text display-4 mb-3"></i>
+                            <h4 class="fw-bold">{{ total_notes }}</h4>
+                            <p class="mb-0">Study Notes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="stat-card text-center p-4 bg-success text-white rounded">
+                            <i class="bi bi-robot display-4 mb-3"></i>
+                            <h4 class="fw-bold">{{ total_notes * 2 }}</h4>
+                            <p class="mb-0">AI Interactions</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="stat-card text-center p-4 bg-info text-white rounded">
+                            <i class="bi bi-calendar-week display-4 mb-3"></i>
+                            <h4 class="fw-bold">{{ (total_notes * 1.5) | round | int }}</h4>
+                            <p class="mb-0">Study Sessions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Learning Progress -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-graph-up text-primary"></i> Learning Progress
+                    </h5>
+                    
+                    <div class="progress-item mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Study Consistency</span>
+                            <span>{{ min(100, total_notes * 15) }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-primary" style="width: {{ min(100, total_notes * 15) }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>AI Utilization</span>
+                            <span>{{ min(100, total_notes * 20) }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: {{ min(100, total_notes * 20) }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-item mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Knowledge Retention</span>
+                            <span>{{ min(100, total_notes * 12) }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-info" style="width: {{ min(100, total_notes * 12) }}%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Achievement Badges -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-trophy text-warning"></i> Achievements
+                    </h5>
+                    
+                    <div class="row g-3">
+                        {% if total_notes >= 1 %}
+                            <div class="col-md-4">
+                                <div class="achievement-badge text-center p-3 bg-light rounded">
+                                    <i class="bi bi-bookmark-star text-success display-4"></i>
+                                    <h6 class="mt-2 fw-bold">First Note</h6>
+                                    <small class="text-muted">Created your first study note</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if total_notes >= 5 %}
+                            <div class="col-md-4">
+                                <div class="achievement-badge text-center p-3 bg-light rounded">
+                                    <i class="bi bi-collection text-primary display-4"></i>
+                                    <h6 class="mt-2 fw-bold">Collector</h6>
+                                    <small class="text-muted">Created 5 study notes</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if total_notes >= 10 %}
+                            <div class="col-md-4">
+                                <div class="achievement-badge text-center p-3 bg-light rounded">
+                                    <i class="bi bi-mortarboard text-warning display-4"></i>
+                                    <h6 class="mt-2 fw-bold">Scholar</h6>
+                                    <small class="text-muted">Created 10 study notes</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if total_notes * 2 >= 5 %}
+                            <div class="col-md-4">
+                                <div class="achievement-badge text-center p-3 bg-light rounded">
+                                    <i class="bi bi-robot text-info display-4"></i>
+                                    <h6 class="mt-2 fw-bold">AI Explorer</h6>
+                                    <small class="text-muted">Used AI features 5 times</small>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if total_notes == 0 %}
+                            <div class="col-12">
+                                <div class="text-center py-4">
+                                    <i class="bi bi-trophy display-4 text-muted"></i>
+                                    <p class="text-muted mt-3">Complete study activities to earn achievements!</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Account Actions -->
+                <div class="text-center">
+                    <h5 class="fw-bold mb-3">Account Actions</h5>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                        <a href="{{ url_for('add_note') }}" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Add Note
+                        </a>
+                        <a href="{{ url_for('ai_assistant') }}" class="btn btn-info">
+                            <i class="bi bi-robot"></i> AI Assistant
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Study Tips -->
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightbulb text-warning"></i> Study Tips for Success
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <strong>Consistent Practice:</strong> Add notes regularly
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <strong>Use AI Features:</strong> Generate summaries and quizzes
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <strong>Active Learning:</strong> Ask questions about your notes
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <strong>Review Regularly:</strong> Revisit your study materials
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <strong>Organize Content:</strong> Use clear, descriptive titles
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <strong>Track Progress:</strong> Monitor your learning journey
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Animate progress bars
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBars = document.querySelectorAll('.progress-bar');
+    
+    progressBars.forEach((bar, index) => {
+        const width = bar.style.width;
+        bar.style.width = '0%';
+        
+        setTimeout(() => {
+            bar.style.transition = 'width 1s ease-in-out';
+            bar.style.width = width;
+        }, index * 200);
+    });
+    
+    // Animate achievement badges
+    const badges = document.querySelectorAll('.achievement-badge');
+    badges.forEach((badge, index) => {
+        badge.style.opacity = '0';
+        badge.style.transform = 'scale(0.8)';
+        
+        setTimeout(() => {
+            badge.style.transition = 'all 0.5s ease-out';
+            badge.style.opacity = '1';
+            badge.style.transform = 'scale(1)';
+        }, index * 150);
+    });
+});
+
+// Add hover effects to stat cards
+document.querySelectorAll('.stat-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px) scale(1.05)';
+        this.style.transition = 'transform 0.3s ease';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+    });
+});
+</script>
+{% endblock %}

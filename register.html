@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Register - AI Study Assistant{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h3 class="mb-0">
+                    <i class="bi bi-person-plus"></i> Create Your Account
+                </h3>
+                <p class="mb-0 mt-2">Join thousands of students enhancing their learning</p>
+            </div>
+            
+            <div class="card-body p-5">
+                <form method="POST" action="{{ url_for('register') }}" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">
+                            <i class="bi bi-person"></i> Full Name
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="name" name="name" 
+                               placeholder="Enter your full name" required>
+                        <div class="invalid-feedback">
+                            Please provide your full name.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="bi bi-envelope"></i> Email Address
+                        </label>
+                        <input type="email" class="form-control form-control-lg" id="email" name="email" 
+                               placeholder="Enter your email address" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid email address.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock"></i> Password
+                        </label>
+                        <input type="password" class="form-control form-control-lg" id="password" name="password" 
+                               placeholder="Create a strong password" required minlength="6">
+                        <div class="form-text">Password must be at least 6 characters long.</div>
+                        <div class="invalid-feedback">
+                            Password must be at least 6 characters long.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label">
+                            <i class="bi bi-lock-fill"></i> Confirm Password
+                        </label>
+                        <input type="password" class="form-control form-control-lg" id="confirm_password" name="confirm_password" 
+                               placeholder="Confirm your password" required>
+                        <div class="invalid-feedback">
+                            Please confirm your password.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-person-check"></i> Create Account
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-muted">
+                            Already have an account? 
+                            <a href="{{ url_for('login') }}" class="text-primary text-decoration-none">
+                                <i class="bi bi-box-arrow-in-right"></i> Login here
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Features Preview -->
+        <div class="text-center mt-4">
+            <div class="row g-3">
+                <div class="col-4">
+                    <div class="bg-light rounded p-3">
+                        <i class="bi bi-shield-check text-primary fs-4"></i>
+                        <div class="small text-muted mt-2">Secure</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="bg-light rounded p-3">
+                        <i class="bi bi-lightning text-primary fs-4"></i>
+                        <div class="small text-muted mt-2">Fast</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="bg-light rounded p-3">
+                        <i class="bi bi-heart text-primary fs-4"></i>
+                        <div class="small text-muted mt-2">Easy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+// Password confirmation validation
+document.getElementById('confirm_password').addEventListener('input', function() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = this.value;
+    
+    if (password !== confirmPassword) {
+        this.setCustomValidity('Passwords do not match');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - AI Study Assistant{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-primary mb-4">
+                    <i class="bi bi-lightbulb"></i> AI Study Assistant
+                </h1>
+                <p class="lead mb-4">
+                    Upload your course PDFs, ask questions, and get answers grounded in retrieved passages from your own study material.
+                </p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                        <i class="bi bi-person-plus"></i> Get Started
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg px-4">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="bi bi-book-half display-1 text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container">
+    <div class="row text-center mb-5">
+        <div class="col-lg-12">
+            <h2 class="fw-bold mb-4">Why Choose AI Study Assistant?</h2>
+            <p class="text-muted">Enhance your learning with powerful AI features</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-file-text display-4 text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Upload Course PDFs</h5>
+                    <p class="card-text text-muted">
+                        Add your own course documents and build a personal, searchable study collection.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-puzzle display-4 text-primary"></i>
+                    </div>
+                    <h5 class="card-title">See the Evidence</h5>
+                    <p class="card-text text-muted">
+                        Review the retrieved passage, document name, and page that support each answer.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-chat-dots display-4 text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Grounded Answers</h5>
+                    <p class="card-text text-muted">
+                        Ask questions about your PDFs. If they do not contain enough information, the assistant says so.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4 mt-4">
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-cloud-upload display-4 text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Cloud Storage</h5>
+                    <p class="card-text text-muted">
+                        Store all your notes securely in the cloud and access them from anywhere, anytime.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-graph-up display-4 text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Progress Tracking</h5>
+                    <p class="card-text text-muted">
+                        Monitor your study progress and see how your knowledge grows over time.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="feature-card card h-100 text-center p-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="bi bi-phone display-4 text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Mobile Friendly</h5>
+                    <p class="card-text text-muted">
+                        Study on the go with our responsive design that works perfectly on all devices.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="cta-section bg-primary text-white text-center py-5 mt-5">
+    <div class="container">
+        <h3 class="fw-bold mb-3">Ready to Transform Your Study Experience?</h3>
+        <p class="lead mb-4">Join thousands of students who are already using AI to enhance their learning.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4">
+            <i class="bi bi-rocket-takeoff"></i> Start Learning Now
+        </a>
+    </div>
+</div>
+{% endblock %}

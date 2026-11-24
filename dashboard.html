@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI Study Assistant{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-primary mb-1">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </h2>
+        <p class="text-muted mb-0">Welcome back, {{ user_name }}! Ready to learn something new?</p>
+    </div>
+    <div>
+        <a href="{{ url_for('add_note') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New Note
+        </a>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-1">Total Notes</h5>
+                        <h2 class="mb-0">{{ total_notes }}</h2>
+                    </div>
+                    <div>
+                        <i class="bi bi-journal-text display-4 opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-1">AI Interactions</h5>
+                        <h2 class="mb-0">{{ total_notes * 2 }}</h2>
+                    </div>
+                    <div>
+                        <i class="bi bi-robot display-4 opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-1">Study Sessions</h5>
+                        <h2 class="mb-0">{{ (total_notes * 1.5) | round | int }}</h2>
+                    </div>
+                    <div>
+                        <i class="bi bi-clock-history display-4 opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title mb-1">Progress</h5>
+                        <h2 class="mb-0">{{ [100, total_notes * 15] | min }}%</h2>
+                    </div>
+                    <div>
+                        <i class="bi bi-trophy display-4 opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Notes -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-folder2-open text-primary"></i> Your Study Notes
+                    </h5>
+                    {% if notes %}
+                        <span class="badge bg-primary">{{ total_notes }} notes</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-body">
+                {% if notes %}
+                    <div class="row g-4">
+                        {% for note in notes %}
+                            <div class="col-lg-4 col-md-6">
+                                <div class="note-card card h-100 border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h6 class="card-title fw-bold text-primary mb-2">
+                                            {{ note.title }}
+                                        </h6>
+                                        <p class="card-text text-muted">
+                                            {{ note.content[:100] }}{% if note.content|length > 100 %}...{% endif %}
+                                        </p>
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar3"></i> 
+                                            {{ note.created_at.split()[0] if note.created_at else 'Recently' }}
+                                        </small>
+                                    </div>
+                                    <div class="card-footer bg-transparent border-top-0">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="{{ url_for('view_note', note_id=note.id) }}" 
+                                               class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-eye"></i> View
+                                            </a>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{{ url_for('ai_assistant') }}?note_id={{ note.id }}" 
+                                                   class="btn btn-outline-success" title="AI Assistant">
+                                                    <i class="bi bi-robot"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <div class="mb-4">
+                            <i class="bi bi-journal-plus display-1 text-muted"></i>
+                        </div>
+                        <h4 class="text-muted">No Notes Yet</h4>
+                        <p class="text-muted mb-4">
+                            Start your learning journey by creating your first study note!
+                        </p>
+                        <a href="{{ url_for('add_note') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle"></i> Create Your First Note
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card bg-light border-0">
+            <div class="card-body text-center py-4">
+                <h5 class="fw-bold mb-3">Quick Actions</h5>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{{ url_for('add_note') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Add Note
+                    </a>
+                    <a href="{{ url_for('ai_assistant') }}" class="btn btn-success">
+                        <i class="bi bi-robot"></i> AI Assistant
+                    </a>
+                    <a href="{{ url_for('profile') }}" class="btn btn-info">
+                        <i class="bi bi-person"></i> Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Add hover effects to note cards
+document.addEventListener('DOMContentLoaded', function() {
+    const noteCards = document.querySelectorAll('.note-card');
+    
+    noteCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{% endblock %}
